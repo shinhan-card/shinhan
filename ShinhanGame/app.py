@@ -1371,8 +1371,26 @@ def get_gemini_response(api_key, user_input, context):
         import google.generativeai as genai
         genai.configure(api_key=api_key)
         
-        # 모델 목록 (우선순위대로)
-        model_names = ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-pro']
+        # 모델 목록 (우선순위대로 - 다양한 버전)
+        model_names = [
+            'gemini-2.5-flash-preview-05-20',
+            'gemini-2.5-pro-preview-05-06',
+            'gemini-2.5-flash-lite',
+            'gemini-2.5-flash',
+            'gemini-2.0-flash',
+            'gemini-2.0-flash-exp',
+            'gemini-2.0-flash-lite',
+            'gemini-1.5-flash',
+            'gemini-1.5-flash-latest',
+            'gemini-1.5-flash-001',
+            'gemini-1.5-flash-002',
+            'gemini-1.5-pro',
+            'gemini-1.5-pro-latest',
+            'gemini-1.0-pro',
+            'gemini-pro',
+            'models/gemini-pro',
+            'models/gemini-1.5-flash',
+        ]
         st.session_state.last_model_used = None
         
         # 호감도 상태
@@ -2026,7 +2044,16 @@ def get_ai_coaching(history, product, persona, is_victory, api_key, company):
         
         # 모델 선택 (여러 모델 시도)
         model = None
-        model_names = ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
+        model_names = [
+            'gemini-2.5-flash-preview-05-20',
+            'gemini-2.5-pro-preview-05-06', 
+            'gemini-2.5-flash-lite',
+            'gemini-2.5-flash',
+            'gemini-2.0-flash',
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
+            'gemini-pro',
+        ]
         for model_name in model_names:
             try:
                 model = genai.GenerativeModel(model_name)
