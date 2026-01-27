@@ -201,28 +201,35 @@ st.markdown("""
     
     #MainMenu, footer, header, .stDeployButton {visibility: hidden; display: none;}
     
-    /* 사이드바 항상 표시 & 숨김 버튼 제거 */
-    [data-testid="collapsedControl"] {display: none !important;}
-    button[kind="headerNoPadding"] {display: none !important;}
-    .stSidebar [data-testid="stSidebarCollapseButton"] {display: none !important;}
-    
-    /* 사이드바 강제 표시 */
+    /* 사이드바 - 모바일에서 숨김/펼침 가능 */
     [data-testid="stSidebar"] {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        transform: translateX(0) !important;
-        width: 300px !important;
-        min-width: 300px !important;
+        background: linear-gradient(180deg, #FFF0F5, #FFE4EC) !important;
     }
     
-    [data-testid="stSidebarContent"] {
-        display: block !important;
-        visibility: visible !important;
+    /* 모바일 반응형 - 사이드바 토글 버튼 스타일 */
+    [data-testid="collapsedControl"] {
+        background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+        border-radius: 50% !important;
+        border: 2px solid white !important;
+        box-shadow: 0 2px 10px rgba(255,105,180,0.4) !important;
     }
     
+    /* 모바일에서 메인 콘텐츠 전체 너비 사용 */
+    @media (max-width: 768px) {
+        [data-testid="stSidebar"] {
+            width: 280px !important;
+            min-width: 280px !important;
+        }
+        
+        .main .block-container {
+            padding: 1rem !important;
+            max-width: 100% !important;
+        }
+    }
+    
+    /* 사이드바 내부 스타일 */
     section[data-testid="stSidebar"] > div {
-        display: block !important;
+        padding-top: 1rem;
     }
     
     /* 은행 지점 배경 (핑크빛) - 애니메이션 적용 */
@@ -1799,7 +1806,7 @@ def render_customer():
         <img src="{image_url}" class="customer-image-large" onerror="this.style.display='none'">
         <div style="font-size:16px;font-weight:700;color:#FF1493;margin-bottom:4px;">{st.session_state.persona.split()[-1]}</div>
         <div style="color:#666;font-size:11px;">{p.get('age', '')} | {p.get('job', '')}</div>
-    </div>
+            </div>
     """, unsafe_allow_html=True)
 
 def render_tips():
@@ -1905,7 +1912,7 @@ def render_dialogue():
             # 설득도 70% 이상이면 성공, 아니면 실패
             if st.session_state.persuasion >= 70:
                 st.session_state.game_state = "victory"
-            else:
+        else:
                 st.session_state.game_state = "defeat"
             st.rerun()
 
@@ -2145,7 +2152,7 @@ def render_report(is_victory):
         <span style="background:linear-gradient(135deg,#FF69B4,#FF1493);color:white;padding:8px 20px;border-radius:20px;font-size:14px;">
             📄 페이지 {st.session_state.report_page} / 3
         </span>
-    </div>
+            </div>
     """, unsafe_allow_html=True)
     
     # ========== 페이지 1: 결과 요약 ==========
@@ -2157,10 +2164,10 @@ def render_report(is_victory):
             <div class="report-title">💝 상담 결과 리포트</div>
             <div class="grade-box">
                 <span class="grade-letter grade-{grade.lower() if grade != 'D' else 'c'}">{grade}</span>
-            </div>
+        </div>
         <div style="text-align:center;color:#555;font-size:16px;margin:10px 0;">
             {result_msg}
-        </div>
+    </div>
         <div style="display:flex;justify-content:center;gap:20px;margin-top:15px;">
             <div style="text-align:center;background:#FFF0F5;padding:10px 15px;border-radius:12px;">
                 <div style="color:#FF1493;font-size:22px;font-weight:700;">{eval_counts['EXCELLENT']}</div>
@@ -2258,7 +2265,7 @@ def render_report(is_victory):
                         <span style="background:#FF69B4;color:white;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700;">TIP {i+1}</span>
                         <p style="color:#333;margin:10px 0 0 0;font-size:14px;">{tip}</p>
                     </div>
-                    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
         else:
             # 기본 강점/보완점
             excellent_count = eval_counts.get("EXCELLENT", 0)
@@ -2577,12 +2584,12 @@ def render_sidebar():
             tip = last.get('tip', '')
             
             if feedback_pos or feedback_imp or tip:
-                st.markdown("""
+        st.markdown("""
                 <div style="background:linear-gradient(135deg,#FFF5EE,#FFE4EC);border-radius:12px;padding:12px;margin-bottom:15px;border-left:4px solid #FF69B4;">
                     <div style="color:#FF69B4;font-weight:700;margin-bottom:8px;font-size:14px;">💝 코치 피드백</div>
-                </div>
-                """, unsafe_allow_html=True)
-                
+        </div>
+        """, unsafe_allow_html=True)
+        
                 if feedback_pos:
                     st.success(f"✅ {feedback_pos}")
                 if feedback_imp:
@@ -2590,7 +2597,7 @@ def render_sidebar():
                 if tip:
                     st.info(f"📌 Tip: {tip}")
                 
-                st.divider()
+        st.divider()
         
         # 탭 구성
         tab1, tab2 = st.tabs(["⚙️ 설정", "📋 상품정보"])
@@ -2604,9 +2611,9 @@ def render_sidebar():
             st.session_state.product = st.selectbox("📦 추천 상품", products)
             st.session_state.persona = st.selectbox("👤 고객 타입", list(PERSONAS.keys()))
             st.session_state.difficulty = st.selectbox("💪 난이도", ["🌱 Easy (순한맛)", "🔥 Normal (보통)", "💀 Hard (매운맛)"], index=2)
-            
-            st.divider()
-            
+        
+        st.divider()
+        
             # 모드 선택과 API Key는 아래로
             mode = st.radio("🎮 모드 선택", ["💝 AI 모드 (Gemini)", "🎮 체험 모드"], index=0)
             st.session_state.game_mode = "ai" if "AI" in mode else "demo"
@@ -2655,20 +2662,20 @@ def render_intro():
         """, unsafe_allow_html=True)
     else:
         # 이미지가 없으면 기존 타이틀 표시
-        st.markdown("""
+    st.markdown("""
         <div class="game-title" style="padding:10px 0;">
             <h1 style="font-size:24px;">💕 두근두근 신한</h1>
             <div class="subtitle">첫번째 고객님</div>
-        </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
     
     # 게임 시작 버튼 (이미지 바로 아래)
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
         if st.button("💕 게임 시작!", use_container_width=True, key="start_btn"):
             start_game()
-            st.rerun()
-    
+        st.rerun()
+
     # 고객 프로필 + 상품 정보 (컴팩트)
     col1, col2 = st.columns(2)
     
@@ -2728,7 +2735,7 @@ def render_game():
     if user_input:
         st.session_state.show_gain = False
         process_input(user_input)
-        st.rerun()
+            st.rerun()
 
 def render_victory():
     st.balloons()
@@ -2746,15 +2753,15 @@ def render_victory():
         lottie = load_lottie(LOTTIE_URLS["success"])
         if lottie:
             st_lottie(lottie, height=130)
-        
-        st.markdown(f"""
+    
+    st.markdown(f"""
         <div style="background:linear-gradient(135deg,#FFE4EC,#FFF0F5);border-radius:25px;padding:25px;text-align:center;border:3px solid #FF69B4;box-shadow:0 8px 30px rgba(255,105,180,0.3);">
             <div style="font-size:40px;margin-bottom:10px;">💕</div>
             <div style="color:#FF1493;font-size:24px;font-weight:900;">계약 성공!</div>
             <div style="color:#555;font-size:14px;margin-top:8px;">"{st.session_state.product}"</div>
             <div style="color:#FF69B4;font-size:28px;font-weight:700;margin-top:15px;">🏆 {st.session_state.score:,} Point</div>
-        </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     render_report(True)
@@ -2765,7 +2772,7 @@ def render_victory():
         if st.button("💕 다시 도전!", use_container_width=True):
             reset_game()
             st.rerun()
-
+    
 def render_defeat():
     # 타이틀
     st.markdown("""
