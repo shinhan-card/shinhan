@@ -1912,7 +1912,7 @@ def render_dialogue():
             # 설득도 70% 이상이면 성공, 아니면 실패
             if st.session_state.persuasion >= 70:
                 st.session_state.game_state = "victory"
-        else:
+            else:
                 st.session_state.game_state = "defeat"
             st.rerun()
 
@@ -2584,12 +2584,12 @@ def render_sidebar():
             tip = last.get('tip', '')
             
             if feedback_pos or feedback_imp or tip:
-        st.markdown("""
+                st.markdown("""
                 <div style="background:linear-gradient(135deg,#FFF5EE,#FFE4EC);border-radius:12px;padding:12px;margin-bottom:15px;border-left:4px solid #FF69B4;">
                     <div style="color:#FF69B4;font-weight:700;margin-bottom:8px;font-size:14px;">💝 코치 피드백</div>
-        </div>
-        """, unsafe_allow_html=True)
-        
+                </div>
+                """, unsafe_allow_html=True)
+                
                 if feedback_pos:
                     st.success(f"✅ {feedback_pos}")
                 if feedback_imp:
@@ -2597,7 +2597,7 @@ def render_sidebar():
                 if tip:
                     st.info(f"📌 Tip: {tip}")
                 
-        st.divider()
+                st.divider()
         
         # 탭 구성
         tab1, tab2 = st.tabs(["⚙️ 설정", "📋 상품정보"])
@@ -2611,9 +2611,9 @@ def render_sidebar():
             st.session_state.product = st.selectbox("📦 추천 상품", products)
             st.session_state.persona = st.selectbox("👤 고객 타입", list(PERSONAS.keys()))
             st.session_state.difficulty = st.selectbox("💪 난이도", ["🌱 Easy (순한맛)", "🔥 Normal (보통)", "💀 Hard (매운맛)"], index=2)
-        
-        st.divider()
-        
+            
+            st.divider()
+            
             # 모드 선택과 API Key는 아래로
             mode = st.radio("🎮 모드 선택", ["💝 AI 모드 (Gemini)", "🎮 체험 모드"], index=0)
             st.session_state.game_mode = "ai" if "AI" in mode else "demo"
@@ -2662,19 +2662,19 @@ def render_intro():
         """, unsafe_allow_html=True)
     else:
         # 이미지가 없으면 기존 타이틀 표시
-    st.markdown("""
+        st.markdown("""
         <div class="game-title" style="padding:10px 0;">
             <h1 style="font-size:24px;">💕 두근두근 신한</h1>
             <div class="subtitle">첫번째 고객님</div>
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
     
     # 게임 시작 버튼 (이미지 바로 아래)
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
         if st.button("💕 게임 시작!", use_container_width=True, key="start_btn"):
             start_game()
-        st.rerun()
+            st.rerun()
 
     # 고객 프로필 + 상품 정보 (컴팩트)
     col1, col2 = st.columns(2)
@@ -2735,7 +2735,7 @@ def render_game():
     if user_input:
         st.session_state.show_gain = False
         process_input(user_input)
-            st.rerun()
+        st.rerun()
 
 def render_victory():
     st.balloons()
