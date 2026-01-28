@@ -1809,7 +1809,7 @@ JSON 형식으로만 응답:
 # ============================================================
 
 # Gemini API Key (고정)
-GEMINI_API_KEY = "AIzaSyA9hix4O7y21I8Z27wVyO0U30140bCNytY"
+GEMINI_API_KEY = "AIzaSyBu7u24vSbiFlWjVWTVQKsDgXJ5T_Pox3o"
 
 def init_session():
     defaults = {
