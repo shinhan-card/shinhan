@@ -886,22 +886,24 @@ st.markdown("""
         color: #333 !important;
     }
     
-    /* 고객 이미지 - 크게 + 떠다니는 애니메이션 */
+    /* 고객 이미지 - 박스에 꽉 차게 + 애니메이션 */
     .customer-image-large {
         display: block;
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
+        width: 100%;
+        max-width: 280px;
+        height: 200px;
+        border-radius: 12px;
         object-fit: cover;
-        border: 4px solid #FF69B4;
-        margin: 0 auto 10px auto;
+        object-position: center top;
+        border: 3px solid #FF69B4;
+        margin: 0 auto 12px auto;
         box-shadow: 0 4px 15px rgba(255,105,180,0.4), 0 0 20px rgba(255,105,180,0.3);
         animation: float 3s ease-in-out infinite, glowBorder 2s ease-in-out infinite;
         transition: transform 0.3s ease;
     }
     
     .customer-image-large:hover {
-        transform: scale(1.1);
+        transform: scale(1.02);
         animation-play-state: paused;
     }
 </style>
@@ -918,6 +920,33 @@ def load_lottie(url):
         return r.json() if r.status_code == 200 else None
     except:
         return None
+
+def get_persona_image(image_name):
+    """페르소나 이미지를 base64로 인코딩해서 반환"""
+    import os
+    
+    # 확장자에 따른 MIME 타입
+    ext = image_name.split('.')[-1].lower()
+    mime_type = "image/jpeg" if ext in ['jpg', 'jpeg'] else "image/png"
+    
+    # 가능한 경로들
+    possible_paths = [
+        image_name,
+        os.path.join(os.path.dirname(__file__), image_name),
+        os.path.join(".", image_name),
+    ]
+    
+    for path in possible_paths:
+        if os.path.exists(path):
+            try:
+                with open(path, "rb") as f:
+                    data = base64.b64encode(f.read()).decode()
+                    return f"data:{mime_type};base64,{data}"
+            except:
+                continue
+    
+    # 이미지를 찾지 못하면 빈 문자열 반환
+    return ""
 
 # ============================================================
 # 📊 데이터 (상세 혜택 포함)
@@ -1013,7 +1042,7 @@ PERSONAS = {
         "age": "26세", 
         "job": "IT기업 개발자", 
         "style": "가성비 중시, 디지털 친화",
-        "image": "https://img.freepik.com/free-photo/young-handsome-man-with-beard-isolated-keeping-arms-crossed-frontal-position_1368-132662.jpg",
+        "image": "20.jpg",
         "concerns": ["해외여행", "구독서비스", "재테크 시작"],
         "speech_style": "친근하고 캐주얼한 MZ 말투"
     },
@@ -1022,7 +1051,7 @@ PERSONAS = {
         "age": "35세", 
         "job": "대기업 과장", 
         "style": "안정 추구, 시간 부족",
-        "image": "https://img.freepik.com/free-photo/corporate-woman-bank-employee-smiling-looking-happy-camera-standing-white-background_1258-88628.jpg",
+        "image": "30.jpg",
         "concerns": ["육아비용", "내집마련", "시간절약"],
         "speech_style": "정중하지만 핵심을 원함"
     },
@@ -1031,7 +1060,7 @@ PERSONAS = {
         "age": "45세", 
         "job": "음식점 사장", 
         "style": "실용적, 절세 관심",
-        "image": "https://img.freepik.com/free-photo/portrait-smiling-middle-aged-business-man_171337-7917.jpg",
+        "image": "40.jpg",
         "concerns": ["사업자금", "절세", "수수료절감"],
         "speech_style": "직설적이고 실용적"
     },
@@ -1040,7 +1069,7 @@ PERSONAS = {
         "age": "55세", 
         "job": "제조업 부장", 
         "style": "원금 보장 선호",
-        "image": "https://img.freepik.com/free-photo/confident-senior-businessman-portrait_53876-40535.jpg",
+        "image": "50.jpg",
         "concerns": ["노후준비", "안전한 투자", "건강보험"],
         "speech_style": "신중하고 꼼꼼함"
     },
@@ -1849,7 +1878,8 @@ def render_persuasion_gauge():
 
 def render_customer():
     p = PERSONAS.get(st.session_state.persona, {})
-    image_url = p.get('image', '')
+    image_name = p.get('image', '')
+    image_url = get_persona_image(image_name) if image_name else ''
     
     # 이미지와 정보 표시 (이미지 크게)
     st.markdown(f"""
@@ -2753,10 +2783,11 @@ def render_intro():
     
     with col1:
         p = PERSONAS.get(st.session_state.persona, {})
+        persona_img = get_persona_image(p.get('image', ''))
         st.markdown(f"""
         <div class="customer-card" style="padding:10px;">
             <div style="font-size:11px;color:#888;margin-bottom:5px;">💝 오늘의 고객님</div>
-            <img src="{p.get('image', '')}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #FF69B4;margin:5px 0;" onerror="this.style.display='none'">
+            <img src="{persona_img}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #FF69B4;margin:5px 0;" onerror="this.style.display='none'">
             <div style="font-size:14px;font-weight:700;color:#FF1493;">{st.session_state.persona}</div>
             <div style="font-size:11px;color:#666;">{p.get('age', '')} · {p.get('job', '')}</div>
             <div style="margin-top:5px;font-size:10px;color:#888;">{p.get('style', '')}</div>
