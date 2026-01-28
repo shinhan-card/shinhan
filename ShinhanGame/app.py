@@ -1809,7 +1809,9 @@ JSON 형식으로만 응답:
 # ============================================================
 
 # Gemini API Key (고정)
-GEMINI_API_KEY = "AIzaSyBu7u24vSbiFlWjVWTVQKsDgXJ5T_Pox3o"
+# 환경 변수에서 API 키 가져오기 (배포 환경용)
+# 하드코딩된 API 키는 보안상 제거됨 - 유출 시 비활성화됨
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", st.secrets["GEMINI_API_KEY"])
 
 def init_session():
     defaults = {
