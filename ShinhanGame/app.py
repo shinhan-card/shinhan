@@ -33,7 +33,7 @@ st.set_page_config(
     page_title="💕 두근두근 신한 : 첫번째 고객님",
     page_icon="💕",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # ============================================================
@@ -2902,9 +2902,9 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 사이드바 상태 관리
+    # 사이드바 상태 관리 (최초 실행 시 접힌 상태)
     if 'sidebar_visible' not in st.session_state:
-        st.session_state.sidebar_visible = True
+        st.session_state.sidebar_visible = False
     
     # 사이드바 표시/숨김 CSS (동적) - 더 강력한 선택자
     if st.session_state.sidebar_visible:
